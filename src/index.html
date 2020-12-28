@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Atom Music</title>
+        <link rel="stylesheet" href="index.css" />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"
+        />
+    </head>
+    <body>
+        <section class="section">
+            <div class="container">
+                <h1 class="title">Welcome to Atom Music</h1>
+                <h3 class="subtitle">
+                    Please log in to your spotify account below
+                </h3>
+            </div>
+            <button class="button is-primary center" id="login">
+                Login to spotify
+            </button>
+            <p id="token"></p>
+        </section>
+        <script src="https://sdk.scdn.co/spotify-player.js"></script>
+        <script>
+            window.onSpotifyWebPlaybackSDKReady = () => {
+                const token =
+                    "BQCA00HIj3iW0-lHhPhZMRePNQ5SMj-pBDJQIsnOhluEo0POOSGj_yeU7PAsT3uXOEfedmIPEEm3tu7MpIVC5qW8E5ZQW9aGQN9fU4vDSRv3YojsK5xDETwwBJraBYkZJKKIyXhWmfjo4r99i9EdbFx0SqChtX5jlKOqvfMpeww_0Z4FXvo";
+                const player = new Spotify.Player({
+                    name: "Atom Music",
+                    getOAuthToken: (cb) => {
+                        cb(token);
+                    },
+                });
+
+                // Error handling
+                player.addListener("initialization_error", ({ message }) => {
+                    console.error(message);
+                });
+                player.addListener("authentication_error", ({ message }) => {
+                    console.error(message);
+                });
+                player.addListener("account_error", ({ message }) => {
+                    console.error(message);
+                });
+                player.addListener("playback_error", ({ message }) => {
+                    console.error(message);
+                });
+
+                // Playback status updates
+                player.addListener("player_state_changed", (state) => {
+                    console.log(state);
+                });
+
+                // Ready
+                player.addListener("ready", ({ device_id }) => {
+                    console.log("Ready with Device ID", device_id);
+                });
+
+                // Not Ready
+                player.addListener("not_ready", ({ device_id }) => {
+                    console.log("Device ID has gone offline", device_id);
+                });
+
+                // Connect to the player!
+                player.connect();
+            };
+        </script>
+        <script defer src="render.js"></script>
+    </body>
+</html>
